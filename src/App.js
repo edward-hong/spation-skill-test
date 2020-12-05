@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useSwipeable } from 'react-swipeable'
 
 const Container = styled.div`
   width: 100vw;
@@ -35,9 +36,26 @@ const LeftDot = styled.span`
   margin-left: 10px;
 `
 
+const InnerDivs = styled.div`
+  margin: 50px auto;
+  width: 70vw;
+  height: 120px;
+  background-color: ${({ isActive }) =>
+    isActive === 'right' ? 'darkblue' : 'teal'};
+  border-radius: 10px;
+  transition: background-color 0.5s;
+`
+
 const App = () => {
   const [top, setTop] = useState(85)
   const [isActive, setIsActive] = useState('right')
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setIsActive('right'),
+    onSwipedRight: () => setIsActive('left'),
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  })
 
   return (
     <Container top={top} onClick={() => setTop(30)}>
@@ -45,6 +63,9 @@ const App = () => {
         <RightDot isActive={isActive} />
         <LeftDot isActive={isActive} />
       </DotContainer>
+      <InnerDivs {...handlers} isActive={isActive} />
+      <InnerDivs {...handlers} isActive={isActive} />
+      <InnerDivs {...handlers} isActive={isActive} />
     </Container>
   )
 }
